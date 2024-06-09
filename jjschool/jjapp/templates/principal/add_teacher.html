@@ -1,3 +1,4 @@
+<!-- templates/principal/add_teacher.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,15 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Teacher</title>
     <style>
+        /* Add some basic styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
 
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
         .container {
-            max-width: 400px;
-            margin: 50px auto;
+            max-width: 800px;
+            margin: 20px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
@@ -30,15 +39,18 @@
             font-weight: bold;
         }
 
-        input[type="text"], input[type="password"], input[type="email"] {
-            padding: 10px;
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea {
+            padding: 8px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 3px;
         }
 
         button {
-            padding: 10px;
+            padding: 10px 20px;
             background-color: #333;
             color: #fff;
             border: none;
@@ -49,20 +61,14 @@
         button:hover {
             background-color: #555;
         }
-
-        .error-message {
-            color: red;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <header>
         <h1>Add Teacher</h1>
-        {% if error_message %}
-            <div class="error-message">{{ error_message }}</div>
-        {% endif %}
-        <form method="post">
+    </header>
+    <div class="container">
+        <form method="POST">
             {% csrf_token %}
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -75,6 +81,15 @@
 
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
+
+            <label for="class_teacher_of_grade">Class Teacher of Grade:</label>
+            <input type="text" id="class_teacher_of_grade" name="class_teacher_of_grade" required>
+
+            <label for="main_subject">Main Subject:</label>
+            <input type="text" id="main_subject" name="main_subject" required>
+
+            <label for="extra_subjects">Extra Subjects:</label>
+            <input type="text" id="extra_subjects" name="extra_subjects">
 
             <button type="submit">Add Teacher</button>
         </form>

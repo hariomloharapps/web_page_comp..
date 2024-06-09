@@ -5,11 +5,25 @@ from .views import (
     list_students, deleted_students, soft_delete_student, restore_student, add_student, edit_student, delete_student,
     home_page, logout_view
 )
+from .views import add_teacher
 from .views import principal_login,add_teacher,  principal_dashboard, manage_notifications, teachers_page, teacher_login ,teachers_dashboard
+from .views import mark_attendance
+from .views import teacher_dashboard
+from .views import mark_attendance
+from django.urls import path, include
+from .views import (
+    principal_dashboard, manage_notifications, edit_notification, delete_notification,
+    list_students, deleted_students, soft_delete_student, restore_student, add_student,
+    edit_student, delete_student, principal_login, logout_view, teachers_page,
+    manager_page, add_teacher, teachers_dashboard, mark_attendance
+)
+
+#
+
 
 urlpatterns = [
     path('', home_page, name='home_page'),
-    path('login', principal_login, name='principal_login'),
+    path('login/', principal_login, name='principal_login'),
     path('principal/dashboard/', principal_dashboard, name='principal_dashboard'),
     path('principal/manage-notifications/', manage_notifications, name='manage_notifications'),
     path('principal/edit-notification/<int:notification_id>/', edit_notification, name='edit_notification'),
@@ -27,5 +41,5 @@ urlpatterns = [
     path('teacher/login/', teacher_login, name='teacher_login'),
     path('teacher/dashboard/', teachers_dashboard, name='teachers_dashboard'),
     path('principal/add_teacher/', add_teacher, name='add_teacher'),
-
+    path('teacher/mark_attendance/', mark_attendance, name='mark_attendance'),
 ]

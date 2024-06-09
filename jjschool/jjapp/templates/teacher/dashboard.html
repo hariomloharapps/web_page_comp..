@@ -1,3 +1,4 @@
+<!-- templates/teacher/dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,16 +12,9 @@
             padding: 0;
         }
 
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
-
         .container {
-            max-width: 800px;
-            margin: 20px auto;
+            max-width: 600px;
+            margin: 50px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 5px;
@@ -44,13 +38,9 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>Teacher Dashboard</h1>
-    </header>
-
     <div class="container">
-        <a class="btn" href="{% url 'home_page' %}">Home</a>
-        <!-- Add other buttons or content as needed -->
+        <h1>Teacher Dashboard</h1>
+        <a class="btn" href="{% url 'mark_attendance' %}">Mark Attendance</a>
     </div>
 </body>
 </html>
