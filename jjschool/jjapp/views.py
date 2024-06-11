@@ -5,6 +5,11 @@ from django.shortcuts import render, redirect
 from .models import Principal
 from django.contrib.auth.hashers import check_password
 
+
+
+
+
+
 def principal_login(request):
     hardcoded_username = 'hyy'
     hardcoded_password = 'hyy'
@@ -199,39 +204,12 @@ from django.shortcuts import render, redirect
 from .models import Teacher
 from django.contrib.auth.hashers import check_password, make_password
 
-def teacher_login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-        try:
-            teacher = Teacher.objects.get(username=username)
-            if check_password(password, teacher.password):
-                request.session['teacher_id'] = teacher.id
-                return redirect('teachers_dashboard')  # Assuming you have a dashboard view for teachers
-            else:
-                error_message = 'Invalid username or password'
-        except Teacher.DoesNotExist:
-            error_message = 'Invalid username or password'
-        
-        return render(request, 'teacher/login.html', {'error_message': error_message})
-    else:
-        return render(request, 'teacher/login.html')
-
-def teachers_dashboard(request):
-    if 'teacher_id' in request.session:
-        # Fetch any required data for teachers dashboard here
-        return render(request, 'teacher/dashboard.html')
-    else:
-        return redirect('teacher_login')
-
-
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
 from .models import Teacher
 from django.shortcuts import render, redirect
-from .forms import TeacherForm
+
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password
@@ -259,67 +237,4 @@ def add_teacher(request):
             return render(request, 'principal/add_teacher.html')
     else:
         return redirect('principal_login')
-
-
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Student, Attendance
-from datetime import date
-
-@login_required(login_url='/teacher/login/')
-def teacher_dashboard(request):
-    if request.method == 'GET':
-        # Fetching all students
-        students = Student.objects.all()
-        # Checking if attendance has been marked for today for any student
-        today = date.today()
-        attendance_marked = Attendance.objects.filter(date=today).exists()
-        context = {'students': students, 'attendance_marked': attendance_marked}
-        return render(request, 'teacher/dashboard.html', context)
-    elif request.method == 'POST':
-        # Processing attendance submission
-        today = date.today()
-        for student in Student.objects.all():
-            # Checking if the student was marked present or absent
-            status = request.POST.get(str(student.id))
-            if status:
-                # Checking if attendance for today already exists for this student
-                existing_attendance = Attendance.objects.filter(student=student, date=today).exists()
-                if not existing_attendance:
-                    # If attendance doesn't exist for today, create a new record
-                    Attendance.objects.create(student=student, date=today, status=status)
-                else:
-                    # If attendance exists, update the status
-                    attendance = Attendance.objects.get(student=student, date=today)
-                    attendance.status = status
-                    attendance.save()
-        # Redirecting back to the teacher dashboard
-        return redirect('teacher_dashboard')
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Student, Attendance
-from django.utils import timezone
-
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Student, Attendance
-from django.utils import timezone
-
-
-def mark_attendance(request):
-    teacher = request.user
-    students = Student.objects.filter(grade=teacher.teacher_profile.class_teacher_of_grade)
-    today = timezone.now().date()
-
-    if request.method == 'POST':
-        for student in students:
-            status = request.POST.get(f'status_{student.id}')
-            Attendance.objects.create(student=student, date=today, status=status, teacher=teacher)
-        return redirect('teacher_dashboard')
-
-    return render(request, 'teacher/mark_attendance.html', {'students': students, 'today': today})
 
